@@ -69,7 +69,7 @@ input, select, textarea, button { font-family: inherit; }
 }
 .header-brand {
   width: var(--sidebar-w); flex-shrink: 0;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px;
   padding: 0 20px; height: 100%;
   border-right: 1px solid rgba(255,255,255,0.08);
   transition: width 0.25s;
