@@ -46,6 +46,9 @@
     <div class="nav-item" data-page="qmsEntry" onclick="showPage('qmsEntry')">
       <span class="nav-ico">📝</span><span>QMS Entry</span>
     </div>
+    <div class="nav-item" data-page="reports" onclick="showPage('reports')">
+      <span class="nav-ico">📊</span><span>Reports</span>
+    </div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Masters</div>
@@ -580,6 +583,70 @@
     <div class="grid-3" id="shift-grid"></div>
   </div>
 
+  <!-- ===== REPORTS ===== -->
+  <div class="page" id="page-reports">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Entry Reports</h2>
+        <p>View and download QMS entries by date range</p>
+      </div>
+      <div class="page-hdr-actions">
+        <button class="btn btn-outline btn-sm" onclick="ReportPage.filter()">↺ Apply Filter</button>
+        <button class="btn btn-success btn-sm" onclick="ReportPage.exportExcel()">📤 Export Excel</button>
+      </div>
+    </div>
+
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">📅</span> Date Range Filter</div></div>
+      <div class="card-body">
+        <div class="form-grid cols-4">
+          <div class="field">
+            <label>From Date</label>
+            <input type="date" id="rpt-from">
+          </div>
+          <div class="field">
+            <label>To Date</label>
+            <input type="date" id="rpt-to">
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <select id="rpt-dept">
+              <option value="">All Departments</option>
+            </select>
+          </div>
+          <div class="field" style="display:flex;align-items:flex-end;">
+            <button class="btn btn-primary" style="width:100%;" onclick="ReportPage.filter()">Apply Filter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="ico">📋</span> Results</div>
+        <div id="rpt-count" style="font-size:13px;color:var(--text3);font-weight:500;"></div>
+      </div>
+      <div class="card-body p0">
+        <div class="table-wrap">
+          <table id="rpt-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Date</th><th>Time</th><th>Shift</th><th>Hour</th>
+                <th>Department</th><th>Machine</th><th>QC Name</th><th>Jobcard</th>
+                <th>Sales Order</th><th>Customer</th><th>Style</th><th>Article</th>
+                <th>Product Cat.</th><th>Order Qty</th><th>Checked</th><th>Pass</th>
+                <th>Reject</th><th>Repair</th><th>FTPR %</th><th>Defects</th>
+              </tr>
+            </thead>
+            <tbody id="rpt-tbody">
+              <tr><td colspan="21" class="table-empty">Select a date range and click Apply Filter</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- ======= TOAST CONTAINER ======= -->
@@ -601,7 +668,7 @@ function showPage(pageId) {
   page.classList.add('active');
   const nav = document.querySelector(`[data-page="${pageId}"]`);
   if(nav) nav.classList.add('active');
-  const names = { dashboard:'Dashboard', qmsEntry:'QMS Entry', departments:'Departments', machines:'Machines', users:'Users', defects:'Defect Database', salesOrders:'Sales Orders', processMapping:'Process Mapping', shifts:'Shift Master' };
+  const names = { dashboard:'Dashboard', qmsEntry:'QMS Entry', reports:'Reports', departments:'Departments', machines:'Machines', users:'Users', defects:'Defect Database', salesOrders:'Sales Orders', processMapping:'Process Mapping', shifts:'Shift Master' };
   const bc = document.getElementById('breadcrumb-current');
   if(bc) bc.textContent = names[pageId] || pageId;
 
@@ -615,6 +682,7 @@ function showPage(pageId) {
   if(pageId === 'salesOrders') SOPage.render();
   if(pageId === 'processMapping') ProcPage.render();
   if(pageId === 'shifts') ShiftPage.render();
+  if(pageId === 'reports') ReportPage.render();
 }
 
 function initHeader() {

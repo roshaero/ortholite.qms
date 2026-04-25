@@ -583,6 +583,112 @@ const EntryPage = {
   }
 };
 
+// ---- REPORTS PAGE ----
+const ReportPage = {
+  _filtered: [],
+  render() {
+    const today = new Date().toISOString().slice(0, 10);
+    const fromEl = document.getElementById('rpt-from');
+    const toEl = document.getElementById('rpt-to');
+    if (fromEl && !fromEl.value) fromEl.value = today;
+    if (toEl && !toEl.value) toEl.value = today;
+    const depts = Store.get('departments');
+    const sel = document.getElementById('rpt-dept');
+    if (sel) {
+      sel.innerHTML = '<option value="">All Departments</option>';
+      depts.forEach(d => { sel.innerHTML += `<option value="${d.name}">${d.name}</option>`; });
+    }
+    this.filter();
+  },
+  filter() {
+    const from = document.getElementById('rpt-from').value;
+    const to = document.getElementById('rpt-to').value;
+    const dept = document.getElementById('rpt-dept').value;
+    if (!from || !to) { Utils.toast('Select both From and To dates', 'error'); return; }
+    if (from > to) { Utils.toast('From date must be before To date', 'error'); return; }
+    const entries = Store.get('entries');
+    this._filtered = entries.filter(e => {
+      const d = e.ts ? e.ts.slice(0, 10) : '';
+      if (d < from || d > to) return false;
+      if (dept && e.dept !== dept) return false;
+      return true;
+    });
+    this.renderTable(this._filtered);
+  },
+  renderTable(entries) {
+    const tbody = document.getElementById('rpt-tbody');
+    const count = document.getElementById('rpt-count');
+    if (!tbody) return;
+    if (count) count.textContent = entries.length ? `${entries.length} record${entries.length !== 1 ? 's' : ''} found` : 'No records found';
+    if (!entries.length) {
+      tbody.innerHTML = '<tr><td colspan="21" class="table-empty">No entries found for selected range</td></tr>';
+      return;
+    }
+    tbody.innerHTML = entries.map((e, i) => {
+      const date = e.ts ? e.ts.slice(0, 10) : '—';
+      const defectStr = e.defects && e.defects.length ? e.defects.map(d => `${d.name} (${d.qty})`).join(', ') : '—';
+      const ftpr = parseFloat(e.ftpr) || 0;
+      const ftprColor = ftpr >= 95 ? '#10b981' : ftpr >= 80 ? '#f59e0b' : '#ef4444';
+      return `<tr>
+        <td>${i + 1}</td>
+        <td>${date}</td>
+        <td>${e.time || '—'}</td>
+        <td>${Utils.esc(e.shift || '—')}</td>
+        <td>${Utils.esc(e.hour || '—')}</td>
+        <td>${Utils.badge(e.dept || '—', 'info')}</td>
+        <td>${Utils.esc(e.machine || '—')}</td>
+        <td>${Utils.esc(e.qcname || '—')}</td>
+        <td>${Utils.esc(e.jobcard || '—')}</td>
+        <td style="font-size:12px;">${Utils.esc(e.soText || '—')}</td>
+        <td>${Utils.esc(e.customer || '—')}</td>
+        <td>${Utils.esc(e.style || '—')}</td>
+        <td>${Utils.esc(e.article || '—')}</td>
+        <td>${Utils.esc(e.prodcat || '—')}</td>
+        <td>${e.orderqty || 0}</td>
+        <td><strong>${e.checked || 0}</strong></td>
+        <td style="color:#10b981;font-weight:600;">${e.pass || 0}</td>
+        <td style="color:#ef4444;font-weight:600;">${e.reject || 0}</td>
+        <td style="color:#f59e0b;font-weight:600;">${e.repair || 0}</td>
+        <td style="color:${ftprColor};font-weight:700;">${ftpr}%</td>
+        <td style="font-size:11px;max-width:180px;">${defectStr}</td>
+      </tr>`;
+    }).join('');
+  },
+  exportExcel() {
+    if (!this._filtered.length) { Utils.toast('No data to export — apply a filter first', 'error'); return; }
+    const rows = this._filtered.map((e, i) => ({
+      '#': i + 1,
+      'Date': e.ts ? e.ts.slice(0, 10) : '',
+      'Time': e.time || '',
+      'Shift': e.shift || '',
+      'Hour': e.hour || '',
+      'Department': e.dept || '',
+      'Machine': e.machine || '',
+      'QC Name': e.qcname || '',
+      'Jobcard No.': e.jobcard || '',
+      'Sales Order': e.soText || '',
+      'Customer': e.customer || '',
+      'Style': e.style || '',
+      'Article': e.article || '',
+      'Product Category': e.prodcat || '',
+      'Order Qty': e.orderqty || 0,
+      'Checked Qty': e.checked || 0,
+      'Pass Qty': e.pass || 0,
+      'Reject Qty': e.reject || 0,
+      'Repair Qty': e.repair || 0,
+      'FTPR %': e.ftpr || 0,
+      'Defects': e.defects && e.defects.length ? e.defects.map(d => `${d.name}(${d.qty})`).join(', ') : ''
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'QMS Report');
+    const from = document.getElementById('rpt-from').value;
+    const to = document.getElementById('rpt-to').value;
+    XLSX.writeFile(wb, `QMS_Report_${from}_to_${to}.xlsx`);
+    Utils.toast('Report downloaded successfully!');
+  }
+};
+
 // ---- SHIFTS PAGE ----
 const ShiftPage = {
   render() {
