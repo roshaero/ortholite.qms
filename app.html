@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QMS — Ortholite India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header class="app-header">
+  <div class="header-brand">
+    <img class="header-logo" src="data:image/jpeg;base64,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" alt="Ortholite India" style="height:32px;filter:brightness(0) invert(1);flex-shrink:0;">
+    <div style="display:none;align-items:center;font-size:18px;font-weight:800;color:white;">Ortholite<sup style="font-size:10px;color:#f59e0b;margin-left:1px;">®</sup></div>
+    <div class="brand-name">Ortholite India Private Ltd. <span>Quality Management System</span></div>
+  </div>
+  <div class="header-center">
+    <div class="breadcrumb">
+      <span>QMS</span> <span>›</span>
+      <span class="current" id="breadcrumb-current">Dashboard</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-time" id="header-time">—</div>
+    <div class="header-shift-badge" id="header-shift-badge">—</div>
+    <div class="header-user" id="header-user-btn">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <div class="user-info" id="user-info">Admin User <span>Admin</span></div>
+    </div>
+    <button class="btn-logout" onclick="logout()">↩ Logout</button>
+  </div>
+</header>
+
+<!-- ======= SIDEBAR ======= -->
+<nav class="app-sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Main</div>
+    <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+      <span class="nav-ico">📊</span><span>Dashboard</span>
+    </div>
+    <div class="nav-item" data-page="qmsEntry" onclick="showPage('qmsEntry')">
+      <span class="nav-ico">📝</span><span>QMS Entry</span>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Masters</div>
+    <div class="nav-item" data-page="departments" onclick="showPage('departments')">
+      <span class="nav-ico">🏭</span><span>Departments</span>
+    </div>
+    <div class="nav-item" data-page="machines" onclick="showPage('machines')">
+      <span class="nav-ico">⚙️</span><span>Machines</span>
+    </div>
+    <div class="nav-item" data-page="users" onclick="showPage('users')">
+      <span class="nav-ico">👥</span><span>Users</span>
+    </div>
+    <div class="nav-item" data-page="defects" onclick="showPage('defects')">
+      <span class="nav-ico">🔴</span><span>Defect Database</span>
+    </div>
+    <div class="nav-item" data-page="salesOrders" onclick="showPage('salesOrders')">
+      <span class="nav-ico">📦</span><span>Sales Orders</span>
+    </div>
+    <div class="nav-item" data-page="processMapping" onclick="showPage('processMapping')">
+      <span class="nav-ico">🔗</span><span>Process Mapping</span>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Configuration</div>
+    <div class="nav-item" data-page="shifts" onclick="showPage('shifts')">
+      <span class="nav-ico">🕐</span><span>Shift Master</span>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    QMS v2.1 · Ortholite India Private Ltd.
+  </div>
+</nav>
+
+<!-- ======= MAIN CONTENT ======= -->
+<main class="app-main">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Quality Dashboard</h2>
+        <p id="dash-date">Real-time quality performance overview</p>
+      </div>
+      <div class="page-hdr-actions">
+        <button class="btn btn-outline btn-sm" onclick="Dashboard.render()">↺ Refresh</button>
+        <button class="btn btn-primary btn-sm" onclick="showPage('qmsEntry')">+ New Entry</button>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid-4 mb24">
+      <div class="kpi-card green">
+        <div class="kpi-icon">✅</div>
+        <div class="kpi-label">First Time Pass Rate</div>
+        <div class="kpi-value green" id="kpi-ftpr">—</div>
+        <div class="kpi-sub">Target ≥ 95.0%</div>
+        <div class="kpi-trend good">↑ +1.2% vs yesterday</div>
+        <div class="kpi-progress"><div class="kpi-progress-bar" id="bar-ftpr" style="width:0%"></div></div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-icon">🔴</div>
+        <div class="kpi-label">Rejection %</div>
+        <div class="kpi-value red" id="kpi-rej">—</div>
+        <div class="kpi-sub">Target ≤ 2.0%</div>
+        <div class="kpi-trend bad">↑ +0.3% above target</div>
+        <div class="kpi-progress"><div class="kpi-progress-bar" id="bar-rej" style="width:0%"></div></div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-icon">🔧</div>
+        <div class="kpi-label">Rework / Repair %</div>
+        <div class="kpi-value amber" id="kpi-rework">—</div>
+        <div class="kpi-sub">Target ≤ 2.5%</div>
+        <div class="kpi-trend bad">↑ +0.4% vs target</div>
+        <div class="kpi-progress"><div class="kpi-progress-bar" id="bar-rework" style="width:0%"></div></div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-icon">📊</div>
+        <div class="kpi-label">Total Checked Qty</div>
+        <div class="kpi-value blue" id="kpi-checked">—</div>
+        <div class="kpi-sub">Today (all shifts)</div>
+        <div class="kpi-trend good">↑ +340 vs yesterday</div>
+        <div class="kpi-progress"><div class="kpi-progress-bar" id="bar-checked" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- Row 1: Hourly + Defect Donut -->
+    <div class="grid-2-1 mb16">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ico">📈</span> Hourly Quality Trend</div>
+          <div style="font-size:11px;color:var(--text3);">FTPR% · Rejection% · Repair%</div>
+        </div>
+        <div class="card-body" style="height:240px;position:relative;">
+          <canvas id="chart-hourly" role="img" aria-label="Hourly quality trend"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="ico">🍩</span> Defect Split</div>
+        </div>
+        <div class="card-body">
+          <div style="position:relative;height:150px;">
+            <canvas id="chart-defect" role="img" aria-label="Defect distribution"></canvas>
+          </div>
+          <div id="defect-legend" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Dept + Shift + Top Defects -->
+    <div class="grid-3 mb16">
+      <div class="card">
+        <div class="card-header"><div class="card-title"><span class="ico">🏭</span> Dept-wise Rejection</div></div>
+        <div class="card-body" style="height:190px;position:relative;">
+          <canvas id="chart-dept" role="img" aria-label="Department wise rejection"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title"><span class="ico">⏰</span> Shift Comparison</div></div>
+        <div class="card-body" style="height:190px;position:relative;">
+          <canvas id="chart-shift" role="img" aria-label="Shift comparison chart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title"><span class="ico">📋</span> Top Defects Today</div></div>
+        <div class="card-body p0">
+          <table>
+            <thead><tr><th>#</th><th>Defect</th><th>Qty</th><th>%</th></tr></thead>
+            <tbody id="top-defects-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="ico">📅</span> Weekly Quality Performance</div>
+        <div style="font-size:11px;color:var(--text3);">FTPR · Rejection · Rework trends</div>
+      </div>
+      <div class="card-body" style="height:200px;position:relative;">
+        <canvas id="chart-weekly" role="img" aria-label="Weekly quality performance"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QMS ENTRY ===== -->
+  <div class="page" id="page-qmsEntry">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>QMS Entry</h2>
+        <p>Production quality data entry — shift and hour auto-selected based on current time</p>
+      </div>
+      <div class="page-hdr-actions">
+        <button class="btn btn-success" onclick="EntryPage.save()">💾 Save Entry</button>
+        <button class="btn btn-outline" onclick="EntryPage.clear()">Clear</button>
+      </div>
+    </div>
+
+    <div class="card mb16">
+      <div class="entry-banner">
+        <div>
+          <h3><span class="live-dot"></span> New Quality Check Entry</h3>
+          <div style="font-size:11px;opacity:0.6;margin-top:3px;">Fill all fields · Pass qty calculated automatically</div>
+        </div>
+        <div style="font-size:12px;opacity:0.7;text-align:right;">
+          <div id="entry-clock" style="font-variant-numeric:tabular-nums;"></div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="form-grid cols-4 mb16">
+          <div class="field">
+            <label>Department <span class="req">*</span></label>
+            <select id="entry-dept" onchange="EntryPage.onDeptChange()">
+              <option value="">-- Select Department --</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Machine</label>
+            <select id="entry-machine"><option>Select dept first</option></select>
+          </div>
+          <div class="field">
+            <label>Shift <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-shift" readonly>
+          </div>
+          <div class="field">
+            <label>Hour <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-hour" readonly>
+          </div>
+        </div>
+
+        <div class="form-grid cols-4 mb16">
+          <div class="field">
+            <label>QC Name <span class="req">*</span></label>
+            <input type="text" id="entry-qcname" placeholder="Inspector name">
+          </div>
+          <div class="field">
+            <label>Sales Order <span class="req">*</span></label>
+            <select id="entry-so" onchange="EntryPage.onSOChange()">
+              <option value="">-- Select SO --</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Jobcard No.</label>
+            <input type="text" id="entry-jobcard" placeholder="e.g. JC-001">
+          </div>
+          <div class="field">
+            <label>Customer <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-customer" readonly>
+          </div>
+        </div>
+
+        <div class="form-grid cols-4 mb16">
+          <div class="field">
+            <label>Style Name <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-style" readonly>
+          </div>
+          <div class="field">
+            <label>Article <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-article" readonly>
+          </div>
+          <div class="field">
+            <label>Product Category <span class="auto-pill">AUTO</span></label>
+            <input type="text" id="entry-prodcat" readonly>
+          </div>
+          <div class="field">
+            <label>Order Qty <span class="auto-pill">AUTO</span></label>
+            <input type="number" id="entry-orderqty" readonly>
+          </div>
+        </div>
+
+        <div class="section-divider"><span>Quantity Details</span></div>
+
+        <div class="form-grid cols-4 mb16">
+          <div class="field">
+            <label>Checked Qty <span class="req">*</span></label>
+            <input type="number" id="entry-checked" placeholder="0" min="0" oninput="EntryPage.calcPass()">
+          </div>
+          <div class="field">
+            <label>Pass Qty <span class="auto-pill">AUTO</span></label>
+            <input type="number" id="entry-pass" readonly>
+          </div>
+          <div class="field">
+            <label>Reject Qty</label>
+            <input type="number" id="entry-reject" placeholder="0" min="0" oninput="EntryPage.calcPass()">
+          </div>
+          <div class="field">
+            <label>Repair Qty</label>
+            <input type="number" id="entry-repair" placeholder="0" min="0" oninput="EntryPage.calcPass()">
+          </div>
+        </div>
+        <div id="entry-live-ftpr" style="font-size:13px;margin-top:-8px;margin-bottom:14px;min-height:20px;"></div>
+
+        <div class="section-divider"><span>Defect Details</span></div>
+
+        <div id="defect-rows" style="margin-bottom:10px;"></div>
+        <button class="btn btn-outline btn-sm" onclick="EntryPage.addDefectRow()" style="margin-bottom:20px;">+ Add Defect Row</button>
+
+        <div style="display:flex;gap:10px;padding-top:16px;border-top:1px solid var(--border);">
+          <button class="btn btn-success" onclick="EntryPage.save()">💾 Save Entry</button>
+          <button class="btn btn-outline" onclick="EntryPage.clear()">↺ Clear Form</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="ico">🗂</span> Entry History (Today)</div>
+        <button class="btn btn-outline btn-sm" onclick="EntryPage.renderRecentEntries()">↺ Refresh</button>
+      </div>
+      <div class="card-body p0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Time</th><th>Dept</th><th>Shift/Hr</th><th>Sales Order</th>
+              <th>QC Name</th><th>Checked</th><th>Pass</th><th>Reject</th><th>Repair</th><th>FTPR%</th>
+            </tr></thead>
+            <tbody id="entry-history-tbody">
+              <tr><td colspan="10" class="table-empty">No entries yet today</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DEPARTMENTS ===== -->
+  <div class="page" id="page-departments">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Department Master</h2>
+        <p>Manage production departments and their settings</p>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">➕</span> Add Department</div></div>
+      <div class="card-body">
+        <div class="input-group" style="max-width:380px;">
+          <input type="text" id="new-dept-input" placeholder="Department name (e.g. Heat Transfer)" onkeydown="if(event.key==='Enter') DeptPage.add()">
+          <button class="btn btn-primary" onclick="DeptPage.add()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title"><span class="ico">🏭</span> Departments</div></div>
+      <div class="card-body p0">
+        <table>
+          <thead><tr><th>#</th><th>Department Name</th><th>Added</th><th>Machines</th><th>Actions</th></tr></thead>
+          <tbody id="dept-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MACHINES ===== -->
+  <div class="page" id="page-machines">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Machine Master</h2>
+        <p>Manage machines by department</p>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">➕</span> Add New Machine</div></div>
+      <div class="card-body">
+        <div class="form-grid cols-4" style="margin-bottom:14px;">
+          <div class="field">
+            <label>Department <span class="req">*</span></label>
+            <select id="add-machine-dept"><option value="">-- Select --</option></select>
+          </div>
+          <div class="field">
+            <label>Machine Name <span class="req">*</span></label>
+            <input type="text" id="add-machine-name" placeholder="e.g. Splitting M/C 3">
+          </div>
+          <div class="field">
+            <label>Machine Code <span class="req">*</span></label>
+            <input type="text" id="add-machine-code" placeholder="e.g. SPL-003">
+          </div>
+          <div class="field">
+            <label>Capacity / Hour</label>
+            <input type="number" id="add-machine-cap" placeholder="e.g. 500">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="MachinePage.add()">+ Add Machine</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="ico">⚙️</span> Machine List</div>
+        <div class="toolbar">
+          <label style="font-size:12px;color:var(--text2);">Filter:</label>
+          <select id="machine-filter-dept" onchange="MachinePage.render()" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;">
+            <option value="">All Departments</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body p0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Department</th><th>Machine Name</th><th>Machine Code</th><th>Capacity/Hr</th><th>Actions</th></tr></thead>
+            <tbody id="machine-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== USERS ===== -->
+  <div class="page" id="page-users">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>User Management</h2>
+        <p>Manage user accounts and department access control</p>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">➕</span> Add New User</div></div>
+      <div class="card-body">
+        <div class="form-grid cols-3" style="margin-bottom:14px;">
+          <div class="field"><label>Full Name <span class="req">*</span></label><input type="text" id="u-name" placeholder="Full name"></div>
+          <div class="field"><label>Login ID <span class="req">*</span></label><input type="text" id="u-id" placeholder="Username (no spaces)"></div>
+          <div class="field"><label>Password <span class="req">*</span></label><input type="password" id="u-pass" placeholder="Password"></div>
+        </div>
+        <div class="form-grid cols-2" style="margin-bottom:14px;max-width:600px;">
+          <div class="field">
+            <label>Role</label>
+            <select id="u-role">
+              <option>Admin</option>
+              <option>QC Supervisor</option>
+              <option>QC Inspector</option>
+              <option>Production Manager</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Department Access <span class="hint">(Ctrl+click = multi)</span></label>
+            <select id="u-depts" multiple style="height:90px;"></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="UserPage.add()">+ Add User</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title"><span class="ico">👥</span> Users</div></div>
+      <div class="card-body p0">
+        <table>
+          <thead><tr><th>#</th><th>Name</th><th>Login ID</th><th>Role</th><th>Dept Access</th><th>Actions</th></tr></thead>
+          <tbody id="user-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DEFECTS ===== -->
+  <div class="page" id="page-defects">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Defect Database</h2>
+        <p>Master list of quality defect types used in QMS Entry</p>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">➕</span> Add Defect</div></div>
+      <div class="card-body">
+        <div class="input-group" style="max-width:380px;">
+          <input type="text" id="new-defect-input" placeholder="Defect name (e.g. Warping)" onkeydown="if(event.key==='Enter') DefectPage.add()">
+          <button class="btn btn-primary" onclick="DefectPage.add()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title"><span class="ico">🔴</span> Active Defects</div></div>
+      <div class="card-body">
+        <div id="defect-tags" style="min-height:60px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SALES ORDERS ===== -->
+  <div class="page" id="page-salesOrders">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Sales Order Master</h2>
+        <p>Manage customer sales orders — supports Excel import/export and Odoo ERP sync</p>
+      </div>
+      <div class="page-hdr-actions">
+        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+          📥 Import Excel
+          <input type="file" accept=".xlsx,.xls" style="display:none;" onchange="SOPage.importExcel(event)">
+        </label>
+        <button class="btn btn-outline btn-sm" onclick="SOPage.exportExcel()">📤 Export Excel</button>
+        <button class="btn btn-primary btn-sm" onclick="SOPage.showOdooModal()">🔗 Odoo Sync</button>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">➕</span> Add Sales Order</div></div>
+      <div class="card-body">
+        <div class="form-grid cols-3" style="margin-bottom:14px;">
+          <div class="field"><label>SO Number <span class="req">*</span></label><input type="text" id="so-num" placeholder="e.g. SO-2025-005"></div>
+          <div class="field"><label>Customer <span class="req">*</span></label><input type="text" id="so-customer" placeholder="Customer company name"></div>
+          <div class="field"><label>Style Name</label><input type="text" id="so-style" placeholder="Product style name"></div>
+        </div>
+        <div class="form-grid cols-4" style="margin-bottom:14px;">
+          <div class="field"><label>Article Code</label><input type="text" id="so-article" placeholder="Article reference"></div>
+          <div class="field">
+            <label>Product Category</label>
+            <select id="so-prodcat">
+              <option value="">-- Select --</option>
+              <option>Diecut Insoles</option>
+              <option>Molded Insoles</option>
+              <option>Uncovered Sheets</option>
+              <option>Covered Sheets</option>
+            </select>
+          </div>
+          <div class="field"><label>Order Qty</label><input type="number" id="so-qty" placeholder="0" min="0"></div>
+          <div class="field" style="justify-content:flex-end;">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" onclick="SOPage.add()">+ Add SO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title"><span class="ico">📦</span> Sales Orders</div></div>
+      <div class="card-body p0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>SO Number</th><th>Customer</th><th>Style</th><th>Article</th><th>Product Cat.</th><th>Order Qty</th><th>Actions</th></tr></thead>
+            <tbody id="so-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROCESS MAPPING ===== -->
+  <div class="page" id="page-processMapping">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Process → Product Category Mapping</h2>
+        <p>Assign manufacturing processes to each product category</p>
+      </div>
+    </div>
+    <div class="card mb16">
+      <div class="card-header"><div class="card-title"><span class="ico">⚙️</span> Process Master</div></div>
+      <div class="card-body">
+        <div class="input-group" style="max-width:380px;margin-bottom:16px;">
+          <input type="text" id="new-proc-input" placeholder="Process name (e.g. Trimming)" onkeydown="if(event.key==='Enter') ProcPage.addProc()">
+          <button class="btn btn-primary" onclick="ProcPage.addProc()">Add</button>
+        </div>
+        <div id="process-tags" style="min-height:40px;"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title"><span class="ico">🔗</span> Assign Processes to Product Categories</div></div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;">Click on a process pill to toggle it for that product category. Highlighted = assigned.</p>
+        <div id="proc-mapping-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SHIFTS ===== -->
+  <div class="page" id="page-shifts">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Shift & Hour Master</h2>
+        <p>Shift schedules and hourly time breakdown</p>
+      </div>
+    </div>
+    <div class="grid-3" id="shift-grid"></div>
+  </div>
+
+</main>
+
+<!-- ======= TOAST CONTAINER ======= -->
+<div id="toast-container"></div>
+
+<script src="js/store.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/pages.js"></script>
+<script>
+// ======= APP INIT =======
+function logout() { sessionStorage.removeItem('qms_user'); window.location.href = 'index.html'; }
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if(!page) return;
+  page.classList.add('active');
+  const nav = document.querySelector(`[data-page="${pageId}"]`);
+  if(nav) nav.classList.add('active');
+  const names = { dashboard:'Dashboard', qmsEntry:'QMS Entry', departments:'Departments', machines:'Machines', users:'Users', defects:'Defect Database', salesOrders:'Sales Orders', processMapping:'Process Mapping', shifts:'Shift Master' };
+  const bc = document.getElementById('breadcrumb-current');
+  if(bc) bc.textContent = names[pageId] || pageId;
+
+  // Page-specific init
+  if(pageId === 'dashboard') Dashboard.render();
+  if(pageId === 'qmsEntry') { EntryPage.init(); EntryPage.renderRecentEntries(); }
+  if(pageId === 'departments') DeptPage.render();
+  if(pageId === 'machines') { Nav.populateAllSelects(); MachinePage.render(); }
+  if(pageId === 'users') { UserPage.populateDepts(); UserPage.render(); }
+  if(pageId === 'defects') DefectPage.render();
+  if(pageId === 'salesOrders') SOPage.render();
+  if(pageId === 'processMapping') ProcPage.render();
+  if(pageId === 'shifts') ShiftPage.render();
+}
+
+function initHeader() {
+  const user = App.currentUser;
+  if(!user) return;
+  const ui = document.getElementById('user-info');
+  const av = document.getElementById('user-avatar');
+  if(ui) ui.innerHTML = `${user.name} <span>${user.role}</span>`;
+  if(av) av.textContent = user.name.charAt(0).toUpperCase();
+
+  // Live clock
+  function tickClock() {
+    const el = document.getElementById('header-time');
+    if(el) el.textContent = new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const sh = Utils.getShiftHour();
+    const sb = document.getElementById('header-shift-badge');
+    if(sb) sb.textContent = sh.shiftName + ' · Hour ' + sh.hourNum;
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // Dashboard date
+  const dd = document.getElementById('dash-date');
+  if(dd) dd.textContent = new Date().toLocaleDateString('en-IN', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+// ======= BOOTSTRAP =======
+App.init();
+initHeader();
+Nav.populateAllSelects();
+showPage('qmsEntry'); // First screen after login is QMS Entry
+</script>
+</body>
+</html>
